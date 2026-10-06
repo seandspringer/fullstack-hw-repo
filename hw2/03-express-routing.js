@@ -27,7 +27,11 @@ app.get('/', (req, res) => {
   res.send('Express Routing Exercise');
 });
 
-// Add your code here
+app.get(routes[0], (req, res) => {
+  res.status(200);
+  res.set({ 'Content-Type': 'text/html' });
+  res.send('WELCOME');
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
