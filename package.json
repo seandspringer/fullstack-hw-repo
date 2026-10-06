@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "start": "node hw2/02-node-routing.js",
-    "dev": "nodemon hw2/02-node-routing.js"
+    "start": "node hw2/03-express-routing.js",
+    "dev": "nodemon hw2/03-express-routing.js"
   },
   "dependencies": {
+    "express": "^5.2.1",
     "nodemon": "^3.1.14"
   }
 }
