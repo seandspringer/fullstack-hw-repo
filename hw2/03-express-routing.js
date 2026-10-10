@@ -21,6 +21,9 @@ const routes = [
   '/other',
 ];
 
+// converts any HTTP Body data into a json, altered in place
+app.use(express.json());
+
 app.get('/', (req, res) => {
   res.status(200);
   res.set({ 'Content-Type': 'text/html' });
@@ -31,15 +34,10 @@ app.get(routes[0], (req, res) => {
   res.status(200);
   res.set({ 'Content-Type': 'text/html' });
   res.send(`
-  <!DOCTYPE html>
-  <html>
-    <body>
-      <div>
-        <h1>Hello World!</h1>
-        <h3>Hosted On Localhost Port ${port}</h3>
-      </div>
-    <body>
-  </html>
+    <div>
+      <h1>Hello World!</h1>
+      <h3>Hosted On Localhost Port ${port}</h3>
+    </div>
   `);
 });
 
@@ -54,15 +52,10 @@ app.get(routes[2], (req, res) => {
   res.set({ 'Content-Type': 'text/html' });
 
   res.send(`
-  <!DOCTYPE html>
-  <html>
-    <body>
-      <div>
-        <h1>Page: Redirected</h1>
-        <h3>You can get here from /redirect or /redirected!</h3>
-      </div>
-    <body>
-  </html>
+    <div>
+      <h1>Page: Redirected</h1>
+      <h3>You can get here from /redirect or /redirected!</h3>
+    </div>
   `);
 });
 
@@ -74,15 +67,10 @@ app.get(routes[3], (req, res) => {
   });
 
   res.send(`
-  <!DOCTYPE html>
-  <html>
-    <body>
-      <div>
-        <h1>Page: Cache</h1>
-        <h3>this resource was cached</h3>
-      </div>
-    <body>
-  </html>
+    <div>
+      <h1>Page: Cache</h1>
+      <h3>this resource was cached</h3>
+    </div>
   `);
 });
 
@@ -94,29 +82,22 @@ app.get(routes[4], (req, res) => {
   });
 
   res.send(`
-  <!DOCTYPE html>
-  <html>
-    <body>
-      <div>
-        <h1>Page: Cookies</h1>
-        <h3>cookies... yummm</h3>
-      </div>
-    <body>
-  </html>
+    <div>
+      <h1>Page: Cookies</h1>
+      <h3>cookies... yummm</h3>
+    </div>
   `);
 });
 
-app.use((req, res, next) => {
+// catch all middleware for anything not already caught by the express router stack:
+app.use((req, res) => {
   res.status(404);
   res.set({ 'Content-Type': 'text/html' });
-  res.send(`<!DOCTYPE html>
-  <html>
-    <body>
-      <div>
-        <h1>404 - page not found</h1>
-      </div>
-    <body>
-  </html>`);
+  res.send(`
+    <div>
+      <h1>404 - page not found</h1>
+    </div>
+  `);
 });
 
 app.listen(port, () => {

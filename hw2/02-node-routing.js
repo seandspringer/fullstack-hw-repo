@@ -1,6 +1,12 @@
 const http = require('http');
 const port = process.env.PORT || 5001;
 
+/*
+  From some reading I was doing, I found it was strongly recommended to add a valid minimal HTML structure to these responses 
+  like the <!DOCTYPE html> and <html> and <body> tags. It appears the browser will infer this from the Content-Type but 
+  I figured I would include them here as practice
+*/
+
 // http://localhost:5001/welcome should return a status code 200 with a welcome message of your choice in html format
 const welcome = (data) => {
   data.status = 200;
@@ -22,7 +28,7 @@ const welcome = (data) => {
 // http://localhost:5001/redirect should redirect the request to '/redirected' by using 302 as the status code / the redirected page should return a redirected message of your choice
 const redirect = (data) => {
   data.status = 302;
-  data.header = { Location: '/redirected' };
+  data.header = { Location: '/redirected' }; // Prettier formatter auto removes the quotes around "location"
   data.body = '';
 };
 
@@ -117,6 +123,7 @@ const server = http.createServer((req, res) => {
     '/other',
   ];
 
+  // Default route:
   const data = {
     status: 404,
     header: { 'Content-Type': 'text/html' },
@@ -131,22 +138,25 @@ const server = http.createServer((req, res) => {
     </html>`,
   };
 
-  //docs say to parse any query parameters that may be tied to the url
+  // docs say to parse any query parameters that may be tied to the url
   const parsedURL = new URL(req.url, `http://localhost:${port}`);
-  console.log(parsedURL.pathname);
+  console.log(req.method);
 
-  if (parsedURL.pathname === routes[0]) {
-    index(data);
-  } else if (parsedURL.pathname === routes[1]) {
-    welcome(data);
-  } else if (parsedURL.pathname === routes[2]) {
-    redirect(data);
-  } else if (parsedURL.pathname === routes[3]) {
-    redirected(data);
-  } else if (parsedURL.pathname === routes[4]) {
-    cache(data);
-  } else if (parsedURL.pathname === routes[5]) {
-    cookie(data);
+  // added in this method protection:
+  if (req.method === 'GET') {
+    if (parsedURL.pathname === routes[0]) {
+      index(data);
+    } else if (parsedURL.pathname === routes[1]) {
+      welcome(data);
+    } else if (parsedURL.pathname === routes[2]) {
+      redirect(data);
+    } else if (parsedURL.pathname === routes[3]) {
+      redirected(data);
+    } else if (parsedURL.pathname === routes[4]) {
+      cache(data);
+    } else if (parsedURL.pathname === routes[5]) {
+      cookie(data);
+    }
   }
 
   res.writeHead(data.status, data.header);

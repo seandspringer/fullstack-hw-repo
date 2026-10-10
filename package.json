@@ -1,7 +1,11 @@
 {
   "scripts": {
-    "start": "node hw2/03-express-routing.js",
-    "dev": "nodemon hw2/03-express-routing.js"
+    "start1": "node hw2/01-coins.js",
+    "dev1": "node hw2/01-coins.js",
+    "start2": "node hw2/02-node-routing.js",
+    "dev2": "nodemon hw2/02-node-routing.js",
+    "start3": "node hw2/03-express-routing.js",
+    "dev3": "nodemon hw2/03-express-routing.js"
   },
   "dependencies": {
     "express": "^5.2.1",
