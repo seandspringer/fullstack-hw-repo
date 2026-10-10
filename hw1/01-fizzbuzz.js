@@ -35,13 +35,14 @@ const fizzbuzz = function fizzBuzzdiv3and5_fizzdiv3_buzzdiv5_elsestr(n) {
   return temp.map((number) => {
     if (number % 3 === 0 && number % 5 === 0) {
       return 'FizzBuzz';
-    } else if (number % 3 === 0) {
-      return 'Fizz';
-    } else if (number % 5 === 0) {
-      return 'Buzz';
-    } else {
-      return String(number);
     }
+    if (number % 3 === 0) {
+      return 'Fizz';
+    }
+    if (number % 5 === 0) {
+      return 'Buzz';
+    }
+    return String(number);
   });
 };
 
