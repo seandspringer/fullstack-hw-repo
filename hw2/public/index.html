@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>04-form</title>
+        <link rel = "stylesheet" href="/css/style.css">
+    </head>
+    <body>
+      <h1 class="title">Input Form</h1>
+      <form id="form">
+        <div class="input-container">
+            <label class="form-label" for="username">Username:</label> 
+            <input type="text" name="username" id="username" required>
+        </div>
+        <div class="input-container">
+            <label class="form-label" for="email">Email:</label> 
+            <input type="email" name="email" id="email" required>
+        </div>
+        <div class="btn-container">
+            <input type="submit" class="submit-button" id="submit-button">
+        </div>
+
+        <script>
+            const form = document.getElementById('form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault(); //prevent normal form submission protocol
+                const data = new FormData(e.target); //get form data as [[name, value]]
+                const obj = Object.fromEntries(data); //convert to object {name: value}
+
+                const origin = location.href;
+                console.log(obj);
+
+                fetch(origin, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(obj)
+                }).then((response) => {
+                    // force load of the new page
+                    if (response.redirected) {
+                        location.href = response.url;
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                });
+            })
+        </script>
+    </form>
+    <body>
+  </html>
