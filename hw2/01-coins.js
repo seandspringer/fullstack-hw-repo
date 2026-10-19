@@ -30,24 +30,30 @@ const CENTS = [
 ];
 
 const calculateChange = (number) => {
-  let prefix = `$${number} ==>`;
+  const prefix = `$${number} ==>`;
   let current = Math.round(number * 100); //convert to cents
 
-  if (current >= 10000) return `${prefix} Error: the number is too large`;
-  else if (current === 0) return `${prefix} No Change!`;
+  if (current > 10000) {
+    return `${prefix} Error: the number is too large`;
+  }
+  if (current === 0) {
+    return `${prefix} No Change!`;
+  }
+  if (current < 0) {
+    return `${prefix} Error: negative number passed to calculateChange`;
+  }
 
   const change = [];
 
-  //destructoring using object names (5.1)
-  for (const { value, singular, plural } of CENTS) {
+  // destructoring using object names (5.1)
+  CENTS.forEach(({ value, singular, plural }) => {
     const count = Math.floor(current / value);
     current %= value; // remaining change after accounting for value
     if (count > 0) {
-      count === 1
-        ? change.push(`${count} ${singular}`)
-        : change.push(`${count} ${plural}`);
+      const units = count === 1 ? singular : plural;
+      change.push(`${count} ${units}`);
     }
-  }
+  });
 
   return `${prefix} ${change.join(', ')}`;
 };
@@ -65,3 +71,4 @@ console.log(calculateChange(0.01));
 console.log(calculateChange(0.0));
 console.log(calculateChange(100));
 console.log(calculateChange(99.99));
+console.log(calculateChange(-1));
