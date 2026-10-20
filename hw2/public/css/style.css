@@ -30,6 +30,19 @@
   width: 100px;
 }
 
+.checkbox-label {
+  color: var(--font-color);
+  font-weight: bold;
+}
+
+.checkbox-label:hover {
+  cursor: pointer;
+}
+
+.checkbox-label * {
+  cursor: pointer;
+}
+
 .input-container {
   padding-bottom: 4px;
 }
@@ -58,4 +71,11 @@
   color: #ffffff;
   font-weight: bold;
   font-size: 14px;
+  white-space: pre-line; /* allows labels to render \n */
+  display: inline-block;
+}
+
+.inline {
+  display: inline-block;
+  vertical-align: top;
 }

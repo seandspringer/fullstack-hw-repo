@@ -80,17 +80,7 @@ const cookie = () => ({
     'Content-Type': 'text/html',
     'Set-Cookie': 'hello=world',
   },
-  body: `
-    <!DOCTYPE html>
-    <html>
-      <body>
-        <div>
-          <h1>Page: Cookies</h1>
-          <h3>cookies... yummm</h3>
-        </div>
-      </body>
-    </html>
-  `,
+  body: 'cookies... yummm',
 });
 
 // For other routes, such as http://localhost:5001/other, this exercise should return a status code 404 with '404 - page not found' in html format

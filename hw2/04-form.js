@@ -4,40 +4,65 @@ const path = require('path');
 const app = express();
 const port = process.env.PORT || 5001;
 
-app.use(express.json());
+// this allows for url encoded parameters to be visible in the POST body
+app.use(express.urlencoded({ extended: true }));
 
 // redirect to /form
-app.get('/', (req, res) => {
-  res.status(302);
-  res.set({ Location: '/form' });
-  res.send();
+app.get('/', (_req, res) => {
+  res.redirect('/form');
 });
 
-app.use(express.static('hw2/public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // http://localhost:5001/form should return a form with input elements for username, email, and submit button
-app.get('/form', (req, res) => {
+app.get('/form', (_req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.post('/form', (req, res) => {
-  console.log('post received');
-  console.log(req.body);
-
-  res.status(302);
-  res.set({
-    Location: '/submit',
-    'Set-Cookie': `username=${req.body.username}; Path=/;`, //Path=/ will make browser send these cookies to all children of / like /submit
-  });
-  res.appendHeader('Set-Cookie', `email=${req.body.email}; Path=/;`);
-  res.send();
-});
-
 // http://localhost:5001/submit should return all the data the user entered
-app.get('/submit', (req, res) => {
-  console.log('redirect /submit entered');
+app.post('/submit', (req, res) => {
+  const { username, email, comments, subscribe } = req.body;
+  const isSubscribed = subscribe ? 'YES!' : 'Maybe Next Time';
 
-  res.sendFile(path.join(__dirname, 'public', 'submit.html'));
+  const page = `
+  <!DOCTYPE html>
+  <html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>04-form</title>
+        <link rel = "stylesheet" href="/css/style.css">
+    </head>
+    <body>
+      <h1 class="title">Submission Results</h1>
+      <div id="form">
+        <div class="input-container">
+            <span class="form-label">Username:</span> 
+            <span id="username" class="label-result">${username}</span>
+        </div>
+        <div class="input-container">
+            <span class="form-label">Email:</span> 
+            <span id="email" class="label-result">${email}</span>
+        </div>
+        <div class="input-container inline">
+            <span class="form-label">Comments:</span>
+        </div>
+        <div class="input-container inline"> 
+            <span id="comments" class="label-result">${comments}</span>
+        </div>
+        <div class="input-container">
+            <span class="form-label">Subscribed?:</span> 
+            <span id="subscribe" class="label-result">${isSubscribed}</span>
+        </div>
+      </div>
+    </body>
+  </html>`;
+
+  // prettier-ignore
+  res
+    .status(200)
+    .set({ 'Content-Type': 'text/html' })
+    .send(page);
 });
 
 app.listen(port, () => {
