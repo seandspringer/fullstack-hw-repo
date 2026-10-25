@@ -9,13 +9,14 @@ app.use(express.urlencoded({ extended: true }));
 
 // redirect to /form
 app.get('/', (_req, res) => {
-  res.redirect('/form');
+  res.redirect(302, '/form');
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // http://localhost:5001/form should return a form with input elements for username, email, and submit button
 app.get('/form', (_req, res) => {
+  // prettier-ignore
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -61,7 +62,7 @@ app.post('/submit', (req, res) => {
   // prettier-ignore
   res
     .status(200)
-    .set({ 'Content-Type': 'text/html' })
+    .type('html')
     .send(page);
 });
 

@@ -20,10 +20,12 @@ const routes = {
   cookie: '/cookie',
 };
 
+// thought it would be good to have a splash page
 app.get('/', (_req, res) => {
+  // prettier-ignore
   res
     .status(200)
-    .set({ 'Content-Type': 'text/html' })
+    .type('html')
     .send('Express Routing Exercise');
 });
 
@@ -31,7 +33,7 @@ app.get(routes.welcome, (_req, res) => {
   // prettier-ignore
   res
     .status(200)
-    .set({ 'Content-Type': 'text/html' })
+    .type('html')
     .send(`
       <div>
         <h1>Hello World!</h1>
@@ -41,14 +43,14 @@ app.get(routes.welcome, (_req, res) => {
 });
 
 app.get(routes.redirect, (_req, res) => {
-  res.redirect(routes.redirected);
+  res.redirect(302, routes.redirected);
 });
 
 app.get(routes.redirected, (_req, res) => {
   // prettier-ignore
   res
     .status(200)
-    .set({ 'Content-Type': 'text/html' })
+    .type('html')
     .send(`
       <div>
         <h1>Page: Redirected</h1>
@@ -61,10 +63,8 @@ app.get(routes.cache, (_req, res) => {
   // prettier-ignore
   res
     .status(200)
-    .set({
-      'Content-Type': 'text/html',
-      'Cache-Control': `max-age=${60 * 60 * 24}`,
-    })
+    .type('html')
+    .cookie('max-age', `${60 * 60 * 24}`)
     .send(`
       <div>
         <h1>Page: Cache</h1>
@@ -76,9 +76,7 @@ app.get(routes.cache, (_req, res) => {
 app.get(routes.cookie, (_req, res) => {
   res
     .status(200)
-    .set({
-      'Content-Type': 'text/html',
-    })
+    .type('text/plain')
     .cookie('hello', 'world')
     .send('cookies... yummm');
 });
@@ -88,7 +86,7 @@ app.use((_req, res) => {
   // prettier-ignore
   res
     .status(404)
-    .set({ 'Content-Type': 'text/html' })
+    .type('html')
     .send(`
       <div>
         <h1>404 - page not found</h1>

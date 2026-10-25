@@ -77,7 +77,7 @@ const cache = () => ({
 const cookie = () => ({
   status: 200,
   header: {
-    'Content-Type': 'text/html',
+    'Content-Type': 'text/plain',
     'Set-Cookie': 'hello=world',
   },
   body: 'cookies... yummm',
