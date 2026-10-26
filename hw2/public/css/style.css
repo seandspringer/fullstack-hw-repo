@@ -9,6 +9,15 @@
   --btn-border-hover: #63ccdf;
 }
 
+body {
+  margin: 0;
+  min-height: 100vh; /* 100% of viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .title {
   color: var(--primary-bkg);
   margin-left: 10px;
@@ -18,7 +27,6 @@
   background-color: var(--primary-bkg);
   border: 1px solid var(--primary-border);
   border-radius: 6px;
-  display: inline-block;
   padding: 8px;
 }
 

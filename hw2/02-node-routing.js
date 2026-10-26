@@ -11,7 +11,7 @@ const port = process.env.PORT || 5001;
 const welcome = () => ({
   status: 200,
   header: {
-    'Content-Type': 'text/html',
+    'Content-Type': 'text/html; charset=utf-8',
   },
   body: `
   <!DOCTYPE html>
@@ -38,7 +38,7 @@ const redirect = () => ({
 const redirected = () => ({
   status: 200,
   header: {
-    'Content-Type': 'text/html',
+    'Content-Type': 'text/html; charset=utf-8',
   },
   body: `
     <!DOCTYPE html>
@@ -57,7 +57,7 @@ const redirected = () => ({
 const cache = () => ({
   status: 200,
   header: {
-    'Content-Type': 'text/html',
+    'Content-Type': 'text/html; charset=utf-8',
     'Cache-Control': `max-age=${60 * 60 * 24}`,
   },
   body: `
@@ -77,7 +77,7 @@ const cache = () => ({
 const cookie = () => ({
   status: 200,
   header: {
-    'Content-Type': 'text/plain',
+    'Content-Type': 'text/plain; charset=utf-8',
     'Set-Cookie': 'hello=world',
   },
   body: 'cookies... yummm',
@@ -88,7 +88,7 @@ const index = () => ({
   // Felt like we needed a splash page and root
   status: 200,
   header: {
-    'Content-Type': 'text/html',
+    'Content-Type': 'text/html; charset=utf-8',
   },
   body: `
     <!DOCTYPE html>
@@ -106,7 +106,7 @@ const index = () => ({
 // 8.2 implicit func return
 const other = () => ({
   status: 404,
-  header: { 'Content-Type': 'text/html' },
+  header: { 'Content-Type': 'text/html; charset=utf-8' },
   body: `
     <!DOCTYPE html>
     <html>

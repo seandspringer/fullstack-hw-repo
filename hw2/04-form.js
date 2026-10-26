@@ -35,27 +35,29 @@ app.post('/submit', (req, res) => {
         <link rel = "stylesheet" href="/css/style.css">
     </head>
     <body>
-      <h1 class="title">Submission Results</h1>
-      <div id="form">
-        <div class="input-container">
-            <span class="form-label">Username:</span> 
-            <span id="username" class="label-result">${username}</span>
+      <main>
+        <h1 class="title">Submission Results</h1>
+        <div id="form">
+          <div class="input-container">
+              <span class="form-label">Username:</span> 
+              <span id="username" class="label-result">${username}</span>
+          </div>
+          <div class="input-container">
+              <span class="form-label">Email:</span> 
+              <span id="email" class="label-result">${email}</span>
+          </div>
+          <div class="input-container inline">
+              <span class="form-label">Comments:</span>
+          </div>
+          <div class="input-container inline"> 
+              <span id="comments" class="label-result">${comments}</span>
+          </div>
+          <div class="input-container">
+              <span class="form-label">Subscribed?:</span> 
+              <span id="subscribe" class="label-result">${isSubscribed}</span>
+          </div>
         </div>
-        <div class="input-container">
-            <span class="form-label">Email:</span> 
-            <span id="email" class="label-result">${email}</span>
-        </div>
-        <div class="input-container inline">
-            <span class="form-label">Comments:</span>
-        </div>
-        <div class="input-container inline"> 
-            <span id="comments" class="label-result">${comments}</span>
-        </div>
-        <div class="input-container">
-            <span class="form-label">Subscribed?:</span> 
-            <span id="subscribe" class="label-result">${isSubscribed}</span>
-        </div>
-      </div>
+      </main>
     </body>
   </html>`;
 

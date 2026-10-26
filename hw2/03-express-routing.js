@@ -64,7 +64,7 @@ app.get(routes.cache, (_req, res) => {
   res
     .status(200)
     .type('html')
-    .cookie('max-age', `${60 * 60 * 24}`)
+    .set('Cache-Control', `max-age=${60 * 60 * 24}`)
     .send(`
       <div>
         <h1>Page: Cache</h1>
