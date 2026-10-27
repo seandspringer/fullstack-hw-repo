@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>04-form</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <main>
+      <h1 class="title">Input Form</h1>
+      <form id="form" action="/submit" method="POST">
+        <div class="input-container">
+          <label class="form-label" for="username">Username:</label>
+          <input type="text" name="username" id="username" required />
+        </div>
+        <div class="input-container">
+          <label class="form-label" for="email">Email:</label>
+          <input type="email" name="email" id="email" required />
+        </div>
+        <div class="input-container">
+          <label class="form-label" for="comments">Comments:</label>
+          <textarea id="comments" name="comments"></textarea>
+        </div>
+        <div class="input-container">
+          <label class="checkbox-label" for="subscribe">
+            <input type="checkbox" id="subscribe" name="subscribe" />
+            Subscribe to Newsletter?
+          </label>
+        </div>
+        <div class="btn-container">
+          <input type="submit" class="submit-button" id="submit-button" />
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

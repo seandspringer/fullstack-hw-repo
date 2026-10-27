@@ -12,22 +12,87 @@ const port = process.env.PORT || 5001;
 
 // For other routes, such as http://localhost:5001/other, this exercise should return a status code 404 with '404 - page not found' in html format
 
-const routes = [
-  'welcome',
-  'redirect',
-  'redirected',
-  'cache',
-  'cookie',
-  'other',
-];
+const routes = {
+  welcome: '/welcome',
+  redirect: '/redirect',
+  redirected: '/redirected',
+  cache: '/cache',
+  cookie: '/cookie',
+};
 
-app.get('/', (req, res) => {
-  res.status(200);
-  res.set({ 'Content-Type': 'text/html' });
-  res.send('Express Routing Exercise');
+// thought it would be good to have a splash page
+app.get('/', (_req, res) => {
+  // prettier-ignore
+  res
+    .status(200)
+    .type('html')
+    .send('Express Routing Exercise');
 });
 
-// Add your code here
+app.get(routes.welcome, (_req, res) => {
+  // prettier-ignore
+  res
+    .status(200)
+    .type('html')
+    .send(`
+      <div>
+        <h1>Hello World!</h1>
+        <h3>Hosted On Localhost Port ${port}</h3>
+      </div>
+    `);
+});
+
+app.get(routes.redirect, (_req, res) => {
+  res.redirect(302, routes.redirected);
+});
+
+app.get(routes.redirected, (_req, res) => {
+  // prettier-ignore
+  res
+    .status(200)
+    .type('html')
+    .send(`
+      <div>
+        <h1>Page: Redirected</h1>
+        <h3>You can get here from /redirect or /redirected!</h3>
+      </div>
+    `);
+});
+
+app.get(routes.cache, (_req, res) => {
+  // prettier-ignore
+  res
+    .status(200)
+    .type('html')
+    .set('Cache-Control', `max-age=${60 * 60 * 24}`)
+    .send(`
+      <div>
+        <h1>Page: Cache</h1>
+        <h3>this resource was cached</h3>
+      </div>
+    `);
+});
+
+app.get(routes.cookie, (_req, res) => {
+  res
+    .status(200)
+    .type('text/plain')
+    .cookie('hello', 'world')
+    .send('cookies... yummm');
+});
+
+// catch all middleware for anything not already caught by the express router stack:
+app.use((_req, res) => {
+  // prettier-ignore
+  res
+    .status(404)
+    .type('html')
+    .send(`
+      <div>
+        <h1>404 - page not found</h1>
+      </div>
+    `);
+});
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
