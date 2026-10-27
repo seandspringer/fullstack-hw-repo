@@ -16,7 +16,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // http://localhost:5001/form should return a form with input elements for username, email, and submit button
 app.get('/form', (_req, res) => {
-  // prettier-ignore
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 

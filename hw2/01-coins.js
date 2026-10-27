@@ -31,8 +31,11 @@ const CENTS = [
 
 const calculateChange = (number) => {
   const prefix = `$${number} ==>`;
-  let current = Math.round(number * 100); //convert to cents
+  let current = Math.round(number * 100); // convert to cents
 
+  if (!Number.isFinite(number)) {
+    return `${prefix} Error: input must be a number`; // verify input is a number
+  }
   if (current > 10000) {
     return `${prefix} Error: the number is too large`;
   }
@@ -72,3 +75,4 @@ console.log(calculateChange(0.0));
 console.log(calculateChange(100));
 console.log(calculateChange(99.99));
 console.log(calculateChange(-1));
+console.log(calculateChange('hi'));
