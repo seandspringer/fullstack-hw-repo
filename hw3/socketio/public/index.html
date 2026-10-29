@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      body {
+        margin: 0;
+        padding-bottom: 3rem;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+      }
+      .form-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      #form {
+        background: rgba(0, 0, 0, 0.15);
+        padding: 0.25rem;
+        display: flex;
+        height: 3rem;
+        box-sizing: border-box;
+        backdrop-filter: blur(10px);
+      }
+      #input {
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 1;
+        border-radius: 2rem;
+        margin: 0.25rem;
+      }
+      #input:focus {
+        outline: none;
+      }
+      #form > button {
+        background: #333;
+        border: none;
+        padding: 0 1rem;
+        margin: 0.25rem;
+        border-radius: 3px;
+        outline: none;
+        color: #fff;
+      }
+
+      #messages {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+      #messages > li {
+        padding: 0.5rem 1rem;
+      }
+      #messages > li:nth-child(odd) {
+        background: #cdcdcd;
+      }
+      .right-align {
+        margin-left: auto;
+        border: 1px solid #ababab;
+        border-radius: 2rem;
+      }
+      p {
+        padding: 0.1rem 1rem;
+        font-size: 9px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <script src="/socket.io/socket.io.js"></script>
+  <body>
+    <ul id="messages"></ul>
+    <div class="form-container">
+      <p id="typing-text"></p>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    const socket = io();
+
+    const typingElementId = 'typing';
+    const messages = document.getElementById('messages');
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const typingElement = document.getElementById('typing-text');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        if (input.value.startsWith('/username ')) {
+          const newName = input.value.replace('/username ', '');
+          socket.emit('username', newName);
+          input.value = '';
+        } else {
+          socket.emit('chat message', input.value);
+          input.value = '';
+        }
+      }
+    });
+
+    input.addEventListener('input', (e) => {
+      console.log(e);
+      console.log(input.value);
+      if (input.value.length > 0) {
+        socket.emit('typing', '1');
+      } else {
+        socket.emit('typing', '0');
+      }
+    });
+
+    socket.on('chat message', (msg) => {
+      const item = document.createElement('li');
+      item.textContent = msg;
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on('connection', (msg) => {
+      const item = document.createElement('li');
+      item.textContent = msg;
+      item.className = 'right-align';
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on('disconnection', (msg) => {
+      const item = document.createElement('li');
+      item.textContent = msg;
+      item.className = 'right-align';
+      messages.appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on('typing', (msg) => {
+      typingElement.textContent = msg;
+    });
+  </script>
+</html>
