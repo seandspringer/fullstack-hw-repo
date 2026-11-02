@@ -1,16 +1,17 @@
 const express = require('express');
+const { url } = require('inspector');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 5001;
 
-const APIKEY = 'rc_live_2763297f673744d3847956438cc3857a';
+const APIKEY = 'rc_live_2763297f673744d3847956438cc3857a'; // free tier
 const APIHEADER = {
   Authorization: `Bearer ${APIKEY}`,
 };
 const ENDPOINT = 'https://api.restcountries.com/countries/v5';
 
-let cachedCountries = null; // attempt to prevent overloading api tokens during dev
-const DEVMODE = process.argv.includes('--dev'); // used to prevent running out of api tokens,
+let cachedCountries = null; // only burn api token once per session by storing raw data here
+const DEVMODE = process.argv.includes('--dev'); // used to prevent running out of api tokens during dev
 
 const getCountries = async () => {
   if (cachedCountries) {
@@ -23,7 +24,7 @@ const getCountries = async () => {
 
   do {
     // API says this call returns in alphabetical orrder of names->>common
-    const response = await fetch(`${ENDPOINT}?offset=${offset}`, {
+    const response = await fetch(`${ENDPOINT}?limit=100&offset=${offset}`, {
       headers: APIHEADER,
     });
 
@@ -34,13 +35,13 @@ const getCountries = async () => {
     }
 
     const json = await response.json();
-    console.log(json);
+
     metadata = json.data.meta;
     offset += metadata.count;
     pages.push(json.data.objects); // array of arrays
 
     if (DEVMODE) {
-      // only get first page to save api tokens
+      // only get first page to save api tokens if in dev mode
       break;
     }
   } while (offset < metadata.total);
@@ -52,9 +53,25 @@ const getCountries = async () => {
 app.get('/api/countries', async (req, res) => {
   try {
     const countries = await getCountries();
-    console.log(countries);
+
+    const response = countries.map((country) => {
+      const {
+        capitals,
+        currencies,
+        uuid,
+        names: { common },
+      } = country;
+
+      return {
+        name: common,
+        uuid: uuid,
+        currencies: currencies,
+        capitals: capitals,
+      };
+    });
+
     return res.status(200).json({
-      payload: countries,
+      payload: response,
     });
   } catch (error) {
     return res.status(500).json({
@@ -74,9 +91,25 @@ app.get('/api/populous', async (req, res) => {
       // pos means second comes before first
       return (second.population || 0) - (first.population || 0);
     });
+    const response = filtered.map((country) => {
+      const {
+        population,
+        flag: { description, url_svg },
+        uuid,
+        names: { common },
+      } = country;
+
+      return {
+        name: common,
+        uuid: uuid,
+        url_svg: url_svg,
+        description: description,
+        population: population,
+      };
+    });
 
     return res.status(200).json({
-      payload: filtered,
+      payload: response,
     });
   } catch (error) {
     return res.status(500).json({
@@ -107,11 +140,7 @@ app.get('/api/regions', async (req, res) => {
       });
     });
 
-    /*
-      regions = {region1: [{country: name, uuid: uuid}]}
-    */
-
-    // so we can iterate over this in react
+    // so we can iterate over this in react - convert to array
     const reply = Object.entries(regions).map(([key, values]) => {
       return {
         region: key,
@@ -119,10 +148,6 @@ app.get('/api/regions', async (req, res) => {
         count: values.length,
       };
     });
-
-    /*
-      reply = [{region: 'Asia", countries: [{country: name, uuid: uuid}], count: number}]
-    */
 
     return res.status(200).json({
       payload: reply,

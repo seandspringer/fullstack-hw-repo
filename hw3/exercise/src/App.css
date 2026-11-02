@@ -202,3 +202,12 @@ ul > li {
   object-fit: scale-down;
   vertical-align: middle;
 }
+
+ul.regions {
+  border: 1px solid var(--accent-border);
+  border-radius: 6px;
+  background-color: var(--accent-bg);
+  display: inline-block;
+  padding: 6px;
+  margin: 0px;
+}

@@ -5,7 +5,7 @@ import './App.css'
 // https://vite.dev/plugins/#vitejs-plugin-react
 // https://reactrouter.com/start/data/routing
 
-
+// internal routes sent to server.cjs
 const getEndpoint = (dataType) => {
   switch (dataType) {
     case 'countries':
@@ -19,6 +19,8 @@ const getEndpoint = (dataType) => {
   }
 }
 
+// main data loader. If an error occurs, then it sets the error attribute to 
+// indicate to the react page, else set data attribute
 const fetchCountries = async (dataType) => {
   try {
     const endpoint = getEndpoint(dataType);
@@ -46,6 +48,13 @@ const fetchCountries = async (dataType) => {
   }
 }
 
+// this is supposed to render during loading events. 
+// See https://reactrouter.com/start/framework/route-module#hydratefallback
+const HydrateFallback = () => {
+  return <p>Loading ...</p>;
+}
+
+// some generic components
 const ErrorItem = ({text}) => {
   return (
     <p>
@@ -55,37 +64,40 @@ const ErrorItem = ({text}) => {
 }
 
 const Navbar = () => (
-  // <Outlet /> is the place where child routes will render
-  // also see https://reactrouter.com/start/declarative/navigating
   <nav>
-    <NavLink  to="/">Home</NavLink > | <NavLink  to="/countries">Countries</NavLink > | <NavLink  to="/populous">Population</NavLink > | <NavLink  to="/regions">Regions</NavLink >
+    <NavLink  to='/'>Home</NavLink > | <NavLink  to='/countries'>Countries</NavLink > | <NavLink  to='/populous'>Population</NavLink > | <NavLink  to='/regions'>Regions</NavLink >
   </nav>
 )
 
+// Home route '/'
 const Home = () => {
-  return <h1>Home</h1>
+  return (
+  <>
+    <h1>Home</h1>
+    <h3>Everything You Ever Wanted to Know About The Countries On This Planet (Almost)</h3>
+  </>
+  )
 }
 
-const CountriesItem = ({data}) => {
-  const name = data.names.common;
-  const capitals = data.capitals.map((capital) => {
+// Countries route /countries
+const CountriesItem = ({name, currencies, capitals}) => {
+  const capitalsF = capitals.map((capital) => {
     return capital.name;
   });
-  const currencies = data.currencies.map((currency) => {
+  const currenciesF = currencies.map((currency) => {
     return currency.name;
   });
-  const key = data.uuid;
 
   return (
     <li> 
-      {name || 'Unknown'} | {capitals?.join(', ') || 'Unknown'} | {currencies?.join(', ') || 'Unknown'}
+      {name || 'Unknown'} | {capitalsF?.join(', ') || 'Unknown'} | {currenciesF?.join(', ') || 'Unknown'}
     </li>
   )
 }
 
 const Countries = () => {
   const {data, error} = useLoaderData();
-  console.log(data);
+  
   if (error) {
     return (
       <>
@@ -100,28 +112,29 @@ const Countries = () => {
   return (
     <>
       <h1>Countries</h1>
+      <h3>All The Countries In the World</h3>
+      <h5>(Country Name | Capital(s) | Currency(ies))</h5>
       <ul>
-        {data.map((data) => {
-          return <CountriesItem key={data.uuid} data={data} />
+        {data.map(({name, uuid, currencies, capitals}) => {
+          return <CountriesItem key={uuid} name={name} currencies={currencies} capitals={capitals} />
         })}
       </ul>
     </>
   )
 }
 
-const PopulationsItem = ({data}) => {
-  const {names: { common: name}, population, flag: {url_svg, description}} = data;
-  console.log(name, population);
+// Population route /populous
+const PopulationsItem = ({name, url_svg, description, population}) => {
   return (
     <li>
-      {name || 'Unknown'} | {population || 'Unknown'} | <img className='flag' src={url_svg} alt={description} height='32px'/>
+      {name || 'Unknown'} | {population.toLocaleString() || 'Unknown'} | <img className='flag' src={url_svg} alt={description} height='24px'/>
     </li>
   )
 }
 
 const Populations = () => {
   const {data, error} = useLoaderData();
-  console.log(data);
+  
   if (error) {
     return (
       <>
@@ -136,28 +149,30 @@ const Populations = () => {
   return (
     <>
       <h1>Populations</h1>
+      <h3>Countries With Population Greater Than 50 Million</h3>
+      <h5>(Country | Population | Flag)</h5>
+      <h3></h3>
       <ul>
-        {data.map((data) => {
-          return <PopulationsItem key={data.uuid} data={data} />
+        {data.map(({name, uuid, url_svg, description, population}) => {
+          return <PopulationsItem key={uuid} name={name} url_svg={url_svg} description={description} population={population} />
         })}
       </ul>
     </>
   )
 }
 
+// regions route /regions
 const RegionItem = ({region, countries, count}) => {
   return (
     <>
-      <h3>
+      <h5>
         {region} | Total Country Count = {count}
-      </h3>
+      </h5>
+      <ul className='regions'>
       {countries.map(({country, uuid}) => {
-        return (
-          <ul>
-            <li key={uuid}>{country}</li>
-          </ul>
-        )
+        return <li key={uuid}>{country}</li>;
       })}
+      </ul>
     </>
   )
 }
@@ -176,13 +191,10 @@ const Regions = () => {
     )
   }
 
-  /*
-    data = [{region: 'Asia", countries: [{country: name, uuid: uuid}], count: number}}]
-  */
-
   return (
     <>
       <h1>Regions</h1>
+      <h3>Each Country Divided Into Regions</h3>
       {data.map(({region, countries, count}) => {
           return <RegionItem region={region} countries={countries} count={count} />;
       })}
@@ -190,6 +202,7 @@ const Regions = () => {
   )
 }
 
+// 404 for any other route
 const Other = () => {
   return (
     <>
@@ -199,6 +212,8 @@ const Other = () => {
 }
 
 const App = () => {
+  // <Outlet /> is the place where child routes will render
+  // also see https://reactrouter.com/start/declarative/navigating
   return (
     <>
       <Navbar />
@@ -209,12 +224,14 @@ const App = () => {
   )
 }
 
+// reactrouter's way of handling routes. See https://reactrouter.com/start/data/routing
+// loaders get called by react framework when page requested
 const router = createBrowserRouter([
   {
     path: '/',
     Component: App,
     children: [
-      {index: true, Component: Home},
+      {index: true, Component: Home}, // set / to index and redner component Home
       {
         path: 'countries', 
         Component: Countries,
@@ -244,8 +261,9 @@ const router = createBrowserRouter([
   }
 ])
 
+// this is what is actuall exported to main.jsx
 const Main = () => {
   return <RouterProvider router={router} />;
 }
 
-export default Main
+export default Main;

@@ -1,4 +1,4 @@
-## CS 465P/565: Full Stack Web Development - Homework Repository
+# CS 465P/565: Full Stack Web Development - Homework Repository
 
 In this repository, you will find starter files for the homework assignments for CS 465P/565: Full Stack Web Development. Check Canvas for more details on each assignment.
 
@@ -12,7 +12,7 @@ Check Canvas for more information on each assignment.
 
 ### Setting Up The Homework Repository
 
-For  instructions on how to set up the homework repository, start with the instructions.md file. 
+For  instructions on how to set up the homework repository, start with the instructions.md file.
 
 ### Checking for Updates
 
