@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "create_template": "npm create vite@latest -- --template react",
-    "rundev": "vite build && nodemon server.cjs --dev",
-    "runprod": "vite build && node server.cjs"
+    "rundev": "vite build && nodemon server.js --dev",
+    "runprod": "vite build && node server.js"
   },
   "dependencies": {
     "express": "^5.3.0",

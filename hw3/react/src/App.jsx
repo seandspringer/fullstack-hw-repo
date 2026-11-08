@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const Square = ({ value, onSquareClick, className }) => {
+function Square({ value, onSquareClick, className }) {
   return (
     <button className={className} onClick={onSquareClick}>
       {value}
@@ -26,10 +26,10 @@ const calculateWinner = (squares) => {
     return squares[a] && squares[a] === squares[b] && squares[a] === squares[c];
   });
 
-  return foundWinner ? foundWinner : null;
+  return foundWinner ?? null;
 };
 
-const Board = ({ xIsNext, squares, onPlay, move }) => {
+function Board({ xIsNext, squares, onPlay, move }) {
   const handleClick = (i) => {
     const nextSquares = squares.slice(); // make copy of squares array
 
@@ -69,7 +69,7 @@ const Board = ({ xIsNext, squares, onPlay, move }) => {
                   key={index}
                   value={squares[index]}
                   className={
-                    winner?.includes(index) ? 'square winning-square' : 'square'
+                    winner?.includes(index) ? "square winning-square" : "square"
                   }
                   onSquareClick={() => {
                     handleClick(index);
@@ -103,8 +103,8 @@ export default function Game() {
   const moves = history.map((_squares, move) => {
     const description = move > 0 ? `Go to move #${move}` : 'Go to game start';
 
-    if (move == currentMove) {
-      return <p key={move}>{`You Are At Move ${move}`}</p>;
+    if (move === currentMove) {
+      return <p role="status" key={move}>{`You Are At Move ${move}`}</p>;
     }
 
     return (

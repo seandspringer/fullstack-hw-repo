@@ -185,6 +185,21 @@
 
 /* my stuff */
 
+.navbar-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-links li:not(:last-child) {
+  border-right: 1px solid var(--border);
+  padding-right: 12px;
+  margin-right: 12px;
+}
+
 a.active {
   font-size: 200%;
   color: red;
@@ -201,6 +216,7 @@ ul > li {
 .flag {
   object-fit: scale-down;
   vertical-align: middle;
+  border: 1px solid var(--border);
 }
 
 ul.regions {

@@ -1,6 +1,9 @@
-const express = require('express');
-const { url } = require('inspector');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// turns our ES6 does not natively support __dirname so:
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = process.env.PORT || 5001;
 
@@ -30,7 +33,7 @@ const getCountries = async () => {
 
     if (!response.ok) {
       throw new Error(
-        `HTTP Status Code: ${response.status} - ${response.statusText}`,
+        `HTTP Status Code: ${response.status} - ${response.statusText}`
       );
     }
 
