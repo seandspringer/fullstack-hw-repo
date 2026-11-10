@@ -10,7 +10,7 @@ import './App.css';
 // https://vite.dev/plugins/#vitejs-plugin-react
 // https://reactrouter.com/start/data/routing
 
-// internal routes sent to server.cjs
+// internal routes sent to server.js
 const getEndpoint = (dataType) => {
   switch (dataType) {
     case 'countries':

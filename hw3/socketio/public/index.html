@@ -104,9 +104,9 @@
     });
 
     input.addEventListener('input', (e) => {
-      if (input.value.length > 0) {
+      if (input.value.length === 1) {
         socket.emit('typing', '1');
-      } else {
+      } else if (input.value.length === 0) {
         socket.emit('typing', '0');
       }
     });

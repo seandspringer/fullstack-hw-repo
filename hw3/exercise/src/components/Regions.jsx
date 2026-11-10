@@ -35,7 +35,7 @@ export default function Regions() {
       <h3>Each Country Divided Into Regions</h3>
       {data.map(({ region, countries, count }) => {
         return (
-          <RegionItem region={region} countries={countries} count={count} />
+          <RegionItem key={region} region={region} countries={countries} count={count} />
         );
       })}
     </>

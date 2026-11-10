@@ -3,8 +3,8 @@ import { useLoaderData } from 'react-router';
 
 // Countries route /countries
 function CountriesItem({ name, currencies, capitals }) {
-  const capitalsF = capitals.map((capital) => capital.name);
-  const currenciesF = currencies.map((currency) => currency.name);
+  const capitalsF = capitals?.map((capital) => capital.name);
+  const currenciesF = currencies?.map((currency) => currency.name);
 
   return (
     <li>
