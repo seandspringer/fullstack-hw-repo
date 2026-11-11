@@ -1,0 +1,23 @@
+{
+  "name": "typescript",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Sean Springer",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "ts1": "tsc src/ts1.ts && node src/ts1.js",
+    "ts2": "tsc src/ts2.ts && node src/ts2.js",
+    "ts3": "tsc src/ts3.ts && node src/ts3.js",
+    "ts4": "tsc src/ts4.ts && node src/ts4.js",
+    "ts5": "tsc src/ts5.ts && node src/ts5.js",
+    "ts6": "tsc src/ts6.ts && node src/ts6.js",
+    "ts7": "tsc src/ts7.ts && node src/ts7.js",
+    "ts8": "tsc src/ts8.ts && node src/ts8.js",
+    "ts9": "tsc src/ts9.ts && node src/ts9.js"
+  },
+  "dependencies": {
+    "typescript": "^7.0.2"
+  }
+}
